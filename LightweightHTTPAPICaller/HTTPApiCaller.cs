@@ -53,8 +53,6 @@ namespace LightweightHTTPAPICaller
         private void setUpClient(HttpClient client, QueryParameters parameters) {
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            parameters.Add("api_key", config.apiKey);
         }
 
         private async Task<ReturnType> handleResponse<ReturnType>(HttpResponseMessage response, QueryParameters parameters) {

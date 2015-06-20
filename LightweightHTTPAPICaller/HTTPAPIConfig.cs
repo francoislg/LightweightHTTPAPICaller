@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 namespace LightweightHTTPAPICaller {
     public class HTTPAPIConfig {
         public String httpAddress { get; private set; }
-        public String apiKey { get; private set; }
         public ResponseType responseType { get; set; }
 
         public HTTPAPIConfig(String httpAddress) {
