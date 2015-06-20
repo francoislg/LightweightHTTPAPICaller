@@ -47,12 +47,14 @@ namespace LightweightHTTPAPICaller
         }
 
         private string buildPath(string path) {
-            return config.httpAddress + path + "." + config.getResponseType();
+            return config.httpAddress + path + "." + config.responseTypeExtension;
         }
 
         private void setUpClient(HttpClient client, QueryParameters parameters) {
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            parameters.Add(config.defaultParameters);
         }
 
         private async Task<ReturnType> handleResponse<ReturnType>(HttpResponseMessage response, QueryParameters parameters) {

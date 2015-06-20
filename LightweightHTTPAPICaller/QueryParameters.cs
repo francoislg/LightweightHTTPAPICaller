@@ -8,19 +8,26 @@ using System.Threading;
 
 namespace LightweightHTTPAPICaller {
     public class QueryParameters {
-        private List<KeyValuePair<string, string>> internalParameters = new List<KeyValuePair<string, string>>();
         public List<KeyValuePair<string, string>> parameters {
-            get {
-                return internalParameters;
-            }
+            private set;
+            get;
         }
         public bool hasParameters {
             get {
-                return internalParameters.Count > 0;
+                return parameters.Count > 0;
             }
         }
+
+        public QueryParameters() {
+            parameters = new List<KeyValuePair<string, string>>();
+        }
+
         public void Add(string key, string value) {
             parameters.Add(new KeyValuePair<string, string>(key, value));
+        }
+
+        public void Add(QueryParameters otherParameters) {
+            otherParameters.parameters.ForEach(entry => Add(entry.Key, entry.Value));
         }
 
         public override string ToString() {

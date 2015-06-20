@@ -6,23 +6,28 @@ using System.Threading.Tasks;
 
 namespace LightweightHTTPAPICaller {
     public class HTTPAPIConfig {
-        public String httpAddress { get; private set; }
-        public ResponseType responseType { get; set; }
+        public string httpAddress { get; set; }
+        public String responseTypeExtension {
+            get {
+                switch (responseType) {
+                    case ResponseType.JSON:
+                        return "json";
+                    case ResponseType.XML:
+                        return "xml";
+                    default:
+                        return "json";
+                }
+            }
+        }
+        public ResponseType responseType {
+            get; set;
+        }
+        public QueryParameters defaultParameters { get; set; }
 
         public HTTPAPIConfig(String httpAddress) {
             this.httpAddress = httpAddress;
             this.responseType = ResponseType.JSON;
-        }
-
-        public string getResponseType() {
-            switch (responseType) {
-                case ResponseType.JSON:
-                    return "json";
-                case ResponseType.XML:
-                    return "xml";
-                default:
-                    return "json";
-            }
+            this.defaultParameters = new QueryParameters();
         }
     }
 }
