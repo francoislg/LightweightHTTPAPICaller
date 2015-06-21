@@ -24,6 +24,17 @@ namespace LightweightHTTPAPICaller
             }
         }
 
+        public async Task<bool> POST(string path, QueryParameters parameters) {
+            using (var client = new HttpClient()) {
+                setUpClient(client, parameters);
+
+                FormUrlEncodedContent urlContent = new FormUrlEncodedContent(parameters.parameters);
+                HttpResponseMessage response = await client.PostAsync(buildPath(path), urlContent);
+
+                return handleResponseWithoutReturn(response, parameters);
+            }
+        }
+
         public async Task<ReturnType> POST<ReturnType>(string path, QueryParameters parameters) {
             using (var client = new HttpClient()) {
                 setUpClient(client, parameters);
@@ -32,6 +43,17 @@ namespace LightweightHTTPAPICaller
                 HttpResponseMessage response = await client.PostAsync(buildPath(path), urlContent);
 
                 return await handleResponse<ReturnType>(response, parameters);
+            }
+        }
+
+        public async Task<bool> PUT(string path, QueryParameters parameters) {
+            using (var client = new HttpClient()) {
+                setUpClient(client, parameters);
+
+                FormUrlEncodedContent urlContent = new FormUrlEncodedContent(parameters.parameters);
+                HttpResponseMessage response = await client.PutAsync(buildPath(path), urlContent);
+
+                return handleResponseWithoutReturn(response, parameters);
             }
         }
 
@@ -60,6 +82,16 @@ namespace LightweightHTTPAPICaller
         private async Task<ReturnType> handleResponse<ReturnType>(HttpResponseMessage response, QueryParameters parameters) {
             if (response.IsSuccessStatusCode) {
                 return await response.Content.ReadAsAsync<ReturnType>();
+            } else {
+                Console.WriteLine(response);
+                Console.WriteLine(parameters);
+                throw new CouldNotReceiveResponse();
+            }
+        }
+
+        private bool handleResponseWithoutReturn(HttpResponseMessage response, QueryParameters parameters) {
+            if (response.IsSuccessStatusCode) {
+                return true;
             } else {
                 Console.WriteLine(response);
                 Console.WriteLine(parameters);
