@@ -24,6 +24,16 @@ namespace LightweightHTTPAPICaller
             }
         }
 
+        public async Task<bool> DELETE(string path, QueryParameters parameters) {
+            using (var client = new HttpClient()) {
+                setUpClient(client, parameters);
+
+                HttpResponseMessage response = await client.DeleteAsync(buildPath(path) + parameters);
+
+                return handleResponseWithoutReturn(response, parameters);
+            }
+        }
+
         public async Task<bool> POST(string path, QueryParameters parameters) {
             using (var client = new HttpClient()) {
                 setUpClient(client, parameters);
