@@ -4,6 +4,10 @@ using System.Linq;
 using System.Text;
 
 namespace LightweightHTTPAPICaller {
-    class CouldNotReceiveResponse : Exception {
+    public class CouldNotReceiveResponse : Exception {
+        public CouldNotReceiveResponse(string message)
+            : base(message) {
+
+        }
     }
 }

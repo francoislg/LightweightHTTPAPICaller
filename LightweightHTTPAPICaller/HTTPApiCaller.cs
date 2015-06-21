@@ -20,7 +20,7 @@ namespace LightweightHTTPAPICaller
 
                 HttpResponseMessage response = await client.GetAsync(buildPath(path) + parameters);
 
-                return await handleResponse<ReturnType>(response, parameters);
+                return await handleResponse<ReturnType>(response, path, parameters);
             }
         }
 
@@ -30,7 +30,7 @@ namespace LightweightHTTPAPICaller
 
                 HttpResponseMessage response = await client.DeleteAsync(buildPath(path) + parameters);
 
-                return handleResponseWithoutReturn(response, parameters);
+                return handleResponseWithoutReturn(response, path, parameters);
             }
         }
 
@@ -41,7 +41,7 @@ namespace LightweightHTTPAPICaller
                 FormUrlEncodedContent urlContent = new FormUrlEncodedContent(parameters.parameters);
                 HttpResponseMessage response = await client.PostAsync(buildPath(path), urlContent);
 
-                return handleResponseWithoutReturn(response, parameters);
+                return handleResponseWithoutReturn(response, path, parameters);
             }
         }
 
@@ -52,7 +52,7 @@ namespace LightweightHTTPAPICaller
                 FormUrlEncodedContent urlContent = new FormUrlEncodedContent(parameters.parameters);
                 HttpResponseMessage response = await client.PostAsync(buildPath(path), urlContent);
 
-                return await handleResponse<ReturnType>(response, parameters);
+                return await handleResponse<ReturnType>(response, path, parameters);
             }
         }
 
@@ -63,7 +63,7 @@ namespace LightweightHTTPAPICaller
                 FormUrlEncodedContent urlContent = new FormUrlEncodedContent(parameters.parameters);
                 HttpResponseMessage response = await client.PutAsync(buildPath(path), urlContent);
 
-                return handleResponseWithoutReturn(response, parameters);
+                return handleResponseWithoutReturn(response, path, parameters);
             }
         }
 
@@ -74,7 +74,7 @@ namespace LightweightHTTPAPICaller
                 FormUrlEncodedContent urlContent = new FormUrlEncodedContent(parameters.parameters);
                 HttpResponseMessage response = await client.PutAsync(buildPath(path), urlContent);
 
-                return await handleResponse<ReturnType>(response, parameters);
+                return await handleResponse<ReturnType>(response, path, parameters);
             }
         }
 
@@ -89,23 +89,23 @@ namespace LightweightHTTPAPICaller
             parameters.Add(config.defaultParameters);
         }
 
-        private async Task<ReturnType> handleResponse<ReturnType>(HttpResponseMessage response, QueryParameters parameters) {
+        private async Task<ReturnType> handleResponse<ReturnType>(HttpResponseMessage response, string path, QueryParameters parameters) {
             if (response.IsSuccessStatusCode) {
                 return await response.Content.ReadAsAsync<ReturnType>();
             } else {
                 Console.WriteLine(response);
                 Console.WriteLine(parameters);
-                throw new CouldNotReceiveResponse();
+                throw new CouldNotReceiveResponse("Invalid request to " + path + " with " + parameters);
             }
         }
 
-        private bool handleResponseWithoutReturn(HttpResponseMessage response, QueryParameters parameters) {
+        private bool handleResponseWithoutReturn(HttpResponseMessage response, string path, QueryParameters parameters) {
             if (response.IsSuccessStatusCode) {
                 return true;
             } else {
                 Console.WriteLine(response);
                 Console.WriteLine(parameters);
-                throw new CouldNotReceiveResponse();
+                throw new CouldNotReceiveResponse("Invalid request to " + path + " with " + parameters);
             }
         }
     }
